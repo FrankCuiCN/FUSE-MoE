@@ -1,0 +1,76 @@
+misc_run_name:                  "A08-SMoE-768-1.4B"                             # <1       > Run name and purpose
+# Basic Settings                                                    # fixed
+data_name:                      "FineWebEdu10B"                     # fixed
+data_dir:                       "./datasets/finewebedu10B"          # fixed
+vocab_size:                     50257                               # fixed
+num_class:                      50257                               # fixed
+context_window:                 2048                                # fixed
+num_block:                      12                                              # <  3     > basic architecture design
+emb_size:                       768                                             # <  3     > basic architecture design
+num_gpu:                        1                                               # < 2      > batch size
+accu_steps:                     8                                               # < 2      > batch size
+batch_size_fwd:                 40                                              # < 2      > batch size
+batch_size:                     320                                             # < 2      > batch size
+# Feedforward Settings                                              # fixed
+ffwd_name:                      "SMoE"                                          # <  3     > basic architecture design
+ffwd_num_head:                  6                                               # <   4    > multi-head & embd-head agreement
+ffwd_head_size:                 128                                             # <   4    > multi-head & embd-head agreement
+ffwd_hid_size:                  73728                                           # <    5   > hidden size considerations (Dense  MLP)
+ffwd_num_expert:                576                                             # <    5   > hidden size considerations (Sparse MoE)
+ffwd_num_expert_active:         1                                   # fixed
+ffwd_expert_size:               128                                 # fixed
+ffwd_use_bias:                  false                               # fixed
+ffwd_activation:                "softmax"
+ffwd_gating_function:           "sigmoid"
+# Attention Settings                                                # fixed
+attn_name:                      "SelfAttnFused"                     # fixed
+attn_num_head:                  6                                               # <   4    > multi-head & embd-head agreement
+attn_head_size:                 128                                             # <   4    > multi-head & embd-head agreement
+# Normalization Settings                                            # fixed
+norm_name:                      "RMSNorm"                           # fixed
+norm_use_affine:                false                               # fixed
+norm_use_bias:                  false                               # fixed
+norm_eps:                       1.0e-5                              # fixed
+# LR Schedule Settings                                              # fixed
+lrsched_max_lr:                 6.0e-4                                          # <     6  > learning rate schedule
+lrsched_min_lr:                 6.0e-4                                          # <     6  > learning rate schedule
+lrsched_warmup_steps:           8000                                # fixed
+lrsched_decay_steps:            1000                                # fixed
+# AdamW Settings                                                    # fixed
+adamw_beta_1:                   0.9                                 # fixed
+adamw_beta_2:                   0.95                                # fixed
+adamw_eps:                      1.0e-8                              # fixed
+adamw_weight_decay:             0.1                                 # fixed
+# Gradient Clipping Settings                                        # fixed
+gradclip_enabled:               true                                # fixed
+gradclip_max_norm:              1.0                                 # fixed
+gradclip_norm_type:             2.0                                 # fixed
+# Evaluation Settings                                               # fixed
+eval_evaluators:                                                    # fixed
+    - "hellaswag"                                                   # fixed
+    - "piqa"                                                        # fixed
+    - "lambada_openai"                                              # fixed
+    - "arc_easy"                                                    # fixed
+    - "arc_challenge"                                               # fixed
+# Performance Settings                                              # fixed
+perf_use_profiler:              false                               # fixed
+perf_use_compile:               true                                # fixed
+perf_compile_mode:              "default"                           # fixed
+perf_use_autocast:              true                                # fixed
+perf_use_liger:                 true                                # fixed
+perf_flex_attn_block_size:      128                                 # fixed
+perf_use_8bit_adamw:            false                                           # <      7 > 8-bit optimizer
+# Dataloader Settings                                               # fixed
+dataloader_num_worker:          4                                   # fixed
+dataloader_pin_memory:          true                                # fixed
+# Reproducibility Settings                                          # fixed
+repro_use_random_seed:          true                                # fixed
+repro_random_seed_value:        42                                  # fixed
+# Save Settings                                                     # fixed
+save_every_step:                1000                                # fixed
+# Miscellaneous Settings                                            # fixed
+misc_project_name:              "project_name"                      # fixed
+misc_project_directory:         "./projects/moe/results/"           # fixed
+# Runtime Variables                                                 # fixed
+runtime:                        {}                                  # fixed
+# ---------------------------------------------------------------------------- #
