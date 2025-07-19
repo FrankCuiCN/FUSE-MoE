@@ -1,0 +1,27 @@
+Advantages    of Using Liger Kernel: Low VRAM usage
+Disadvantages of Using Liger Kernel: Slower, less numerically stable
+
+Issue:    Numerical stability issue when compiling the liger kernel. (Specifics were not documented.)
+Solution: Do not compile the liger kernel.
+    ```
+    self.liger = LigerFusedLinearCrossEntropyLoss(ignore_index=-1)
+    self.liger = torch.compiler.disable(self.liger, recursive=True)
+    ```
+
+Issue:    Loss spikes after ~2000 steps of training; MLP-125, batch_size: 40 per GPU * 4 GPUs * 4 grad accu steps
+Finding:  Disabling Liger Kernel seems to mitigate it.
+Solution: Disable the liger kernel if possible.
+
+
+Related Discussions:
+"Reduce the number of chunks"
+https://github.com/linkedin/Liger-Kernel/issues/512#issuecomment-2571539575
+
+"""
+I found the root cause of the issue with LigerFusedLinearCrossEntropyLoss.
+The problem was related to the data types of the weight and hidden_states variables.
+Initially, both were in fp16 when passed to the fused loss function.
+After converting these variables to fp32 before passing them to LigerFusedLinearCrossEntropyLoss,
+    the issue was resolved, and the training loss started to converge normally just as using torch.nn.CrossEntropyLoss.
+"""
+https://github.com/linkedin/Liger-Kernel/issues/512

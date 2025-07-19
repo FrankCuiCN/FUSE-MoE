@@ -1,0 +1,14 @@
+Issue:
+    In DDP, only gradients (Δw) are synchronized
+        w + Δw + Δw + Δw + Δw + Δw...
+    Each process maintains its own model and optimizer state separately.
+    Because gradients are synchronized, and each optimizer sees identical gradients,
+        the optimizer states on each GPU/device will evolve in parallel, but independently.
+    Ideally, the optimizer states naturally remain very close or identical across devices.
+    Slight numerical differences might occur due to floating-point arithmetic.
+    In practice, these differences are negligible.
+
+Solution:
+    No action needed for now.
+    Consider periodically synchronizing the internal states of the model and optimizer.
+    For example during the periodic validation & checkpointing stage.
